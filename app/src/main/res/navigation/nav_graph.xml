@@ -36,12 +36,29 @@
 
     <fragment
         android:id="@+id/main_fragment"
-        android:name="com.example.cameraxsample.ui.main.MainFragment"
+        android:name="com.example.cameraxsample.ui.video.CaptureFragment"
         android:label="Capture" >
 
         <action
             android:id="@+id/action_capture_to_permissions"
             app:destination="@id/permissions_fragment" />
+        <action
+            android:id="@+id/action_capture_to_video_viewer"
+            app:destination="@id/video_viewer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/video_viewer"
+        android:name="com.example.cameraxsample.ui.video.VideoViewerFragment"
+        android:label="fragment_video_viewer"
+        tools:layout="@layout/fragment_video_viewer" >
+        <argument
+            android:name="uri"
+            app:argType="android.net.Uri" />
+
+        <action
+            android:id="@+id/action_video_viewer_to_capture"
+            app:destination="@id/main_fragment" />
     </fragment>
 
 </navigation>

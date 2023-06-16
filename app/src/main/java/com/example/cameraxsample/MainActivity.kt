@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.cameraxsample.databinding.ActivityMainBinding
-import com.example.cameraxsample.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
