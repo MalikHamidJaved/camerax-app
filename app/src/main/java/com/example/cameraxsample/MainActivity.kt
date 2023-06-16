@@ -20,11 +20,7 @@ class MainActivity : AppCompatActivity() {
         // Fix the screen orientation for this sample to focus on cameraX API
         // rather than UI
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance())
-                .commitNow()
-        }
+
     }
 
 
