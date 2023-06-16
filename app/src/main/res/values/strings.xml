@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name">CameraxSample</string>
     <string name="Idle">Idle</string>
-    <string name="google_play_services_key">AIzaSyC0ZErQW6nRWO6wMEH-AI5j_MWVJHKk8sM</string>
-    <!--<string name="google_play_services_key">AIzaSyCBeFn_daUCtOwmi9FMAM5pknrItFIplp0</string>&lt;!&ndash;Client's&ndash;&gt;-->
-    <!--<string name="google_play_services_key">AIzaSyAf7L51iHuUR5cgDNhOGDTxZLCoaPpZipo</string>&lt;!&ndash;Barber direct's&ndash;&gt;-->
 
     <string name="hint_email">Email</string>
     <string name="hint_bio">Bio</string>
