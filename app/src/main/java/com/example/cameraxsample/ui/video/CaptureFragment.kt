@@ -2,8 +2,8 @@ package com.example.cameraxsample.ui.video
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Intent
 import android.content.res.Configuration
-import java.text.SimpleDateFormat
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -11,29 +11,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.video.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.util.Consumer
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.camera.utils.GenericListAdapter
+import com.example.cameraxsample.R
+import com.example.cameraxsample.Utils.PathUtil
 import com.example.cameraxsample.databinding.FragmentCaptureBinding
 import com.example.cameraxsample.extensions.getAspectRatio
 import com.example.cameraxsample.extensions.getAspectRatioString
 import com.example.cameraxsample.extensions.getNameString
+import com.example.cameraxsample.preview.PreviewVideoActivity
 import kotlinx.coroutines.*
+import java.text.SimpleDateFormat
 import java.util.*
-import com.example.cameraxsample.R
 
 class CaptureFragment : Fragment() {
 
@@ -165,11 +168,21 @@ class CaptureFragment : Fragment() {
         if (event is VideoRecordEvent.Finalize) {
              // display the captured video
             lifecycleScope.launch {
-                navController.navigate(
-                    CaptureFragmentDirections.actionCaptureToVideoViewer(
-                        event.outputResults.outputUri
-                    )
-                )
+                if(event.outputResults.outputUri != null){
+                    val i = Intent(requireActivity(), PreviewVideoActivity::class.java)
+                    val filePath: String = PathUtil.getPath(context, event.outputResults.outputUri)
+                    i.putExtra("DATA",  filePath)
+
+                    //binding.ivProfilePic.setImageURI(Uri.fromFile(selectedImageFile));
+                    //binding.ivProfilePic.setImageURI(Uri.fromFile(selectedImageFile));
+                    startActivity(i)
+                }
+
+//                navController.navigate(
+//                    CaptureFragmentDirections.actionCaptureToVideoViewer(
+//                        event.outputResults.outputUri
+//                    )
+//                )
             }
         }
     }
