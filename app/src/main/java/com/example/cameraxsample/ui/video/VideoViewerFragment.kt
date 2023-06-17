@@ -43,7 +43,7 @@ class VideoViewerFragment : androidx.fragment.app.Fragment() {
         val tv = TypedValue()
         if (requireActivity().theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
             val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
-            binding.videoViewerTips.y  = binding.videoViewerTips.y - actionBarHeight
+//            binding.videoViewerTips.y  = binding.videoViewerTips.y - actionBarHeight
         }
 
         return binding.root
@@ -96,7 +96,7 @@ class VideoViewerFragment : androidx.fragment.app.Fragment() {
         val filePath = getAbsolutePathFromUri(uri) ?: return
         val fileInfo = "FileSize: $fileSize\n $filePath"
         Log.i("VideoViewerFragment", fileInfo)
-        binding.videoViewerTips.text = fileInfo
+//        binding.videoViewerTips.text = fileInfo
 
         val mc = MediaController(requireContext())
         binding.videoViewer.apply {
