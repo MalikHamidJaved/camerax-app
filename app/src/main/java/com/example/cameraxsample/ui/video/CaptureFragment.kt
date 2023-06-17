@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -26,6 +27,7 @@ import androidx.lifecycle.whenCreated
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.android.camera.utils.GenericListAdapter
 import com.example.cameraxsample.R
 import com.example.cameraxsample.Utils.PathUtil
@@ -168,21 +170,20 @@ class CaptureFragment : Fragment() {
         if (event is VideoRecordEvent.Finalize) {
              // display the captured video
             lifecycleScope.launch {
-                if(event.outputResults.outputUri != null){
-                    val i = Intent(requireActivity(), PreviewVideoActivity::class.java)
-                    val filePath: String = PathUtil.getPath(context, event.outputResults.outputUri)
-                    i.putExtra("DATA",  filePath)
+                if(event.outputResults.outputUri != null) {
+//                    val i = Intent(requireActivity(), PreviewVideoActivity::class.java)
+//                    val filePath: String = PathUtil.getPath(context, event.outputResults.outputUri)
+//                    i.putExtra("DATA",  filePath)
+//
+//                    startActivity(i)
+//                }
 
-                    //binding.ivProfilePic.setImageURI(Uri.fromFile(selectedImageFile));
-                    //binding.ivProfilePic.setImageURI(Uri.fromFile(selectedImageFile));
-                    startActivity(i)
+                    navController.navigate(
+                        CaptureFragmentDirections.actionCaptureToVideoViewer(
+                            event.outputResults.outputUri
+                        )
+                    )
                 }
-
-//                navController.navigate(
-//                    CaptureFragmentDirections.actionCaptureToVideoViewer(
-//                        event.outputResults.outputUri
-//                    )
-//                )
             }
         }
     }
@@ -467,12 +468,13 @@ class CaptureFragment : Fragment() {
      *    in the bindCaptureUsecase().
      */
     private fun initializeQualitySectionsUI() {
+        captureViewBinding.audioSelection.visibility = View.GONE
         val selectorStrings = cameraCapabilities[cameraIndex].qualities.map {
-            it.getNameString()
+            it.getNameString().split("(")[1].replace(")","")
         }
         // create the adapter to Quality selection RecyclerView
         captureViewBinding.qualitySelection.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
             adapter = GenericListAdapter(
                 selectorStrings,
                 itemLayoutId = R.layout.video_quality_item
@@ -482,6 +484,7 @@ class CaptureFragment : Fragment() {
                     findViewById<TextView>(R.id.qualityTextView)?.text = qcString
                     // select the default quality selector
                     isSelected = (position == qualityIndex)
+                    findViewById<TextView>(R.id.qualityTextView)?.setTextColor(if(isSelected) Color.YELLOW else Color.WHITE)
                 }
 
                 holderView.setOnClickListener { view ->
@@ -502,6 +505,7 @@ class CaptureFragment : Fragment() {
                     viewLifecycleOwner.lifecycleScope.launch {
                         bindCaptureUsecase()
                     }
+                    adapter?.notifyDataSetChanged()
                 }
             }
             isEnabled = false

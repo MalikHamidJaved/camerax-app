@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">CameraxSample</string>
     <string name="Idle">Idle</string>
+    <string name="file_provider_name">com.candle.path</string>
+    <string name="pictures_path">Candle</string>
 
     <string name="hint_email">Email</string>
     <string name="hint_bio">Bio</string>
