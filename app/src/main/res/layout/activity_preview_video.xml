@@ -25,6 +25,7 @@
         <com.example.cameraxsample.photoeditor.PhotoEditorView
             android:id="@+id/ivImage"
             android:layout_width="match_parent"
+            android:elevation="12dp"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,6 +41,7 @@
             android:layout_marginTop="25dp"
             android:background="@color/black_trasp"
             android:padding="8dp"
+            android:elevation="14dp"
             android:src="@drawable/ic_close"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -52,6 +54,7 @@
             android:layout_marginTop="25dp"
             android:background="@color/black_trasp"
             android:padding="8dp"
+            android:elevation="14dp"
             android:src="@drawable/ic_undo"
             app:layout_constraintEnd_toStartOf="@id/imgText"
             app:layout_constraintTop_toTopOf="parent" />
@@ -64,6 +67,7 @@
             android:layout_margin="25dp"
             android:background="@color/black_trasp"
             android:padding="8dp"
+            android:elevation="14dp"
             android:src="@drawable/ic_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -75,6 +79,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/black_trasp"
             android:padding="8dp"
+            android:elevation="14dp"
             android:src="@drawable/ic_brush"
             app:layout_constraintStart_toStartOf="@id/imgText"
             app:layout_constraintTop_toBottomOf="@id/imgText" />
@@ -86,6 +91,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/black_trasp"
             android:padding="8dp"
+            android:elevation="14dp"
             android:src="@drawable/ic_sticker"
             app:layout_constraintStart_toStartOf="@id/imgDraw"
             app:layout_constraintTop_toBottomOf="@id/imgDraw" />
@@ -97,6 +103,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/black_trasp"
             android:padding="8dp"
+            android:elevation="14dp"
             android:src="@drawable/ic_close"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/imgSticker"
@@ -110,6 +117,7 @@
             android:layout_margin="30dp"
             android:background="@color/black_trasp"
             android:padding="8dp"
+            android:elevation="14dp"
             android:src="@drawable/ic_save"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

@@ -3,9 +3,12 @@ package com.example.cameraxsample.ui.permissions.fragments
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +22,7 @@ import androidx.navigation.Navigation
 import com.example.cameraxsample.R
 import com.example.cameraxsample.databinding.FragmentPermissionBinding
 import kotlinx.coroutines.launch
+
 
 private var PERMISSIONS_REQUIRED = arrayOf(
     Manifest.permission.CAMERA,
@@ -41,6 +45,17 @@ class PermissionsFragment : Fragment() {
         if (!hasPermissions(requireContext())) {
             // Request camera-related permissions
             activityResultLauncher.launch(PERMISSIONS_REQUIRED)
+        }
+        askForPermissions()
+    }
+
+    fun askForPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                startActivity(intent)
+                return
+            }
         }
     }
     override fun onCreateView(
