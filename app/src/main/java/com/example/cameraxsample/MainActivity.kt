@@ -1,48 +1,70 @@
 package com.example.cameraxsample
 
-import android.content.pm.ActivityInfo
-import androidx.appcompat.app.AppCompatActivity
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import android.view.View
-import com.example.cameraxsample.databinding.ActivityMainBinding
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import com.example.cameraxsample.ui.EntryFragment
+import com.example.cameraxsample.viewmodels.SharedViewModel
+import com.example.cameraxsample.R
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        private const val REQUEST_CODE_PERMISSIONS = 10
+        private val REQUIRED_PERMISSIONS =
+            mutableListOf (
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO,
+            ).apply {
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                }
+            }.toTypedArray()
+    }
 
+    private lateinit var viewModel: SharedViewModel
 
-    private lateinit var activityMainBinding: ActivityMainBinding
+    private val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            val count = supportFragmentManager.backStackEntryCount
+            if (count != 0) {
+                supportFragmentManager.popBackStack()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(activityMainBinding.root)
+        setContentView(R.layout.activity_main)
+        viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
-        // Fix the screen orientation for this sample to focus on cameraX API
-        // rather than UI
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        if (!allPermissionsGranted()) {
+            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+        } else {
+            viewModel.setPermission(allPermissionsGranted())
+        }
 
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, EntryFragment.newInstance())
+                .commitNow()
+        }
     }
 
-
-    override fun onResume() {
-        super.onResume()
-        // Before setting full screen flags, we must wait a bit to let UI settle; otherwise, we may
-        // be trying to set app to immersive mode before it's ready and the flags do not stick
-        activityMainBinding.container.postDelayed({
-            activityMainBinding.container.systemUiVisibility = FLAGS_FULLSCREEN
-        }, IMMERSIVE_FLAG_TIMEOUT)
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            viewModel.setPermission(allPermissionsGranted())
+        }
     }
 
-    companion object {
-        /** Combination of all flags required to put activity into immersive mode */
-        const val FLAGS_FULLSCREEN =
-            View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                    View.SYSTEM_UI_FLAG_FULLSCREEN or
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-
-        /** Milliseconds used for UI animations */
-        const val ANIMATION_FAST_MILLIS = 50L
-        const val ANIMATION_SLOW_MILLIS = 100L
-        const val IMMERSIVE_FLAG_TIMEOUT = 500L
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
     }
 }
