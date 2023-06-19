@@ -45,7 +45,6 @@ import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.FFmpegLoadBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
@@ -143,6 +142,7 @@ class VideoViewerFragment : androidx.fragment.app.Fragment(),
         }
 
         val filePath = getAbsolutePathFromUri(uri) ?: return
+        videoPath = filePath
         val fileInfo = "FileSize: $fileSize\n $filePath"
         Log.i("VideoViewerFragment", fileInfo)
 //        binding.videoViewerTips.text = fileInfo
@@ -220,54 +220,54 @@ class VideoViewerFragment : androidx.fragment.app.Fragment(),
         binding!!.imgText.setOnClickListener(this)
         binding!!.imgUndo.setOnClickListener(this)
         binding!!.imgSticker.setOnClickListener(this)
-        binding!!.videoSurface.surfaceTextureListener = object :
-            TextureView.SurfaceTextureListener {
-            override fun onSurfaceTextureAvailable(
-                surfaceTexture: SurfaceTexture,
-                i: Int,
-                i1: Int
-            ) {
-                //                activityHomeBinding.videoSurface.getLayoutParams().height=640;
-                //                activityHomeBinding.videoSurface.getLayoutParams().width=720;
-                val surface: Surface = Surface(surfaceTexture)
-                try {
-                    mediaPlayer = MediaPlayer()
-                    //                    mediaPlayer.setDataSource("http://daily3gp.com/vids/747.3gp");
-                    Log.d("VideoPath>>", (videoPath)!!)
-                    mediaPlayer!!.setDataSource(videoPath)
-                    mediaPlayer!!.setSurface(surface)
-                    mediaPlayer!!.prepare()
-                    mediaPlayer!!.setOnCompletionListener(onCompletionListener)
-                    mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC)
-                    mediaPlayer!!.start()
-                } catch (e: IllegalArgumentException) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace()
-                } catch (e: SecurityException) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace()
-                } catch (e: IllegalStateException) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace()
-                } catch (e: IOException) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace()
-                }
-            }
-
-            override fun onSurfaceTextureSizeChanged(
-                surfaceTexture: SurfaceTexture,
-                i: Int,
-                i1: Int
-            ) {
-            }
-
-            override fun onSurfaceTextureDestroyed(surfaceTexture: SurfaceTexture): Boolean {
-                return false
-            }
-
-            override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {}
-        }
+//        binding!!.videoSurface.surfaceTextureListener = object :
+//            TextureView.SurfaceTextureListener {
+//            override fun onSurfaceTextureAvailable(
+//                surfaceTexture: SurfaceTexture,
+//                i: Int,
+//                i1: Int
+//            ) {
+//                //                activityHomeBinding.videoSurface.getLayoutParams().height=640;
+//                //                activityHomeBinding.videoSurface.getLayoutParams().width=720;
+//                val surface: Surface = Surface(surfaceTexture)
+//                try {
+//                    mediaPlayer = MediaPlayer()
+//                    //                    mediaPlayer.setDataSource("http://daily3gp.com/vids/747.3gp");
+//                    Log.d("VideoPath>>", (videoPath)!!)
+//                    mediaPlayer!!.setDataSource(videoPath)
+//                    mediaPlayer!!.setSurface(surface)
+//                    mediaPlayer!!.prepare()
+//                    mediaPlayer!!.setOnCompletionListener(onCompletionListener)
+//                    mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC)
+//                    mediaPlayer!!.start()
+//                } catch (e: IllegalArgumentException) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace()
+//                } catch (e: SecurityException) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace()
+//                } catch (e: IllegalStateException) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace()
+//                } catch (e: IOException) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace()
+//                }
+//            }
+//
+//            override fun onSurfaceTextureSizeChanged(
+//                surfaceTexture: SurfaceTexture,
+//                i: Int,
+//                i1: Int
+//            ) {
+//            }
+//
+//            override fun onSurfaceTextureDestroyed(surfaceTexture: SurfaceTexture): Boolean {
+//                return false
+//            }
+//
+//            override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {}
+//        }
         exeCmd = ArrayList()
         try {
             fFmpeg?.loadBinary(object : FFmpegLoadBinaryResponseHandler {
@@ -287,7 +287,7 @@ class VideoViewerFragment : androidx.fragment.app.Fragment(),
                     Log.d("binaryLoad", "onFinish")
                 }
             })
-        } catch (e: FFmpegNotSupportedException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -385,7 +385,7 @@ class VideoViewerFragment : androidx.fragment.app.Fragment(),
     @SuppressLint("MissingPermission")
     private fun saveImage() {
         val file = File(
-            Environment.getExternalStorageDirectory()
+            requireActivity().filesDir
                 .toString() + File.separator + ""
                     + System.currentTimeMillis() + ".png"
         )
@@ -425,7 +425,7 @@ class VideoViewerFragment : androidx.fragment.app.Fragment(),
 
     private fun applayWaterMark() {
         val output = File(
-            (Environment.getExternalStorageDirectory()
+            (requireActivity().filesDir
                 .toString() + File.separator + ""
                     + System.currentTimeMillis() + ".mp4")
         )

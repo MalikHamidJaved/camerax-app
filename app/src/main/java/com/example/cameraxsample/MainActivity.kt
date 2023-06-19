@@ -12,13 +12,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         super.onCreate(savedInstanceState)
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
         // Fix the screen orientation for this sample to focus on cameraX API
         // rather than UI
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
     }
 
