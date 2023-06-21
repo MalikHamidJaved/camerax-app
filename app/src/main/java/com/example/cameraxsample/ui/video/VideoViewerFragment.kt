@@ -33,6 +33,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.cameraxsample.R
 import com.example.cameraxsample.Utils.DimensionData
+import com.example.cameraxsample.Utils.MediaStoreUtils
 import com.example.cameraxsample.Utils.Utils
 import com.example.cameraxsample.bottomSheet.PropertiesBSFragment
 import com.example.cameraxsample.bottomSheet.StickerBSFragment
@@ -389,6 +390,8 @@ class VideoViewerFragment : androidx.fragment.app.Fragment(),
                 .toString() + File.separator + ""
                     + System.currentTimeMillis() + ".png"
         )
+
+        MediaStoreUtils.createImageUri(requireContext(),System.currentTimeMillis().toString() + ".png")
         try {
             file.createNewFile()
             val saveSettings = SaveSettings.Builder()

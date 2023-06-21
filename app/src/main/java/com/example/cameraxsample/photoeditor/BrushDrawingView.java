@@ -167,8 +167,11 @@ public class BrushDrawingView extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        Bitmap canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        mDrawCanvas = new Canvas(canvasBitmap);
+        if(w>0 && h >0){
+            Bitmap canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            mDrawCanvas = new Canvas(canvasBitmap);
+        }
+
     }
 
     @Override
